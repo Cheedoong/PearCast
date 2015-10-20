@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Pear CDN WebRTC Streaming Demo</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./css/base.css" rel="stylesheet">
+
+    <!-- Font-Awesome -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+  </head>
+
+  <body>
+  
+    <div class="site-wrapper">
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+          <div class="masthead clearfix">
+            <div class="inner">
+              <a href="/">
+                <img src="./img/pear.png" alt="Pear Limited (Hong Kong)" align="left"/>
+              </a>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row videos">
+        <div id="video" class="col-xs-12 col-md-9">
+          <div id="player"></div>
+          <p class="pull-right visible-md visible-lg">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="videoSize">Toggle video size</button>
+          </p>
+          <div class="log"></div>
+          <div class="speed"></div>
+          
+          <h4>Real Time Speed Chart:</h4>
+		  <canvas id="smoothie-chart" width="840" height="320"></canvas>
+    	  <p><font color="#00ff00">========</font>Download speed &nbsp;&nbsp; | &nbsp;&nbsp; Upload speed<font color="#ff0000">========</font></p>
+          <div id="download" class="hidden">
+            <h3>Download progress</h3>
+            <div class="progress">
+              <div id="progressBar" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="caption">
+            <h3>Yosemite HD <small>Project Yosemite</small></h3>
+            <p class="lead">This video is a collaboration between Sheldon Neill and Colin Delehanty. All timelapses were shot on the Canon 5D Mark II with a variety of Canon L and Zeiss CP.2 Lenses.</p>
+          </div>
+        </div>
+       
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">&copy; 2015 Pear. Powered by <a href="https://pear.hk">Pear</a>.</p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./js/jquery.min.js" type="text/javascript"></script>
+	<script src="./js/smoothie.js" type="text/javascript"></script>
+		
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
+    <script src="./js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $('[data-toggle=videoSize]').click(function () {
+          $('#video').toggleClass('col-md-9')
+        })
+      })
+    </script>
+
+    <!-- WebTorrent -->
+    <script>
+      var torrentName = 'yosemite-hd.torrent'
+    </script>
+    <script src="./js/bundle-stream.js"></script>
+
+    <!-- Fastclick -->
+    <script src="./js/fastclick.js"></script>
+    <script>
+      $(function() {
+        FastClick.attach(document.body)
+      })
+    </script>
+  </body>
+</html>
