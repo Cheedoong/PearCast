@@ -1,0 +1,99 @@
+// new:
+
+      // Alan TOTO: Draw each contributer's "contribution":
+      var chart = new SmoothieChart({minValue:1000})
+      canvas = document.getElementById('smoothie-chart')
+      var down_curve = new TimeSeries();
+      var up_curve = new TimeSeries();
+      var down_detail_curves = new Array();
+      var up_detail_curves = new Array();
+      var ptr;
+      for (ptr = 0; ptr < torrent.wires.length; ptr++) {
+          down_detail_curves.push(new TimeSeries());
+          up_detail_curves.push(new TimeSeries());
+      }
+        
+      setInterval(function() {
+      down_curve.append(new Date().getTime(), client.downloadSpeed);
+      up_curve.append(new Date().getTime(), client.uploadSpeed);
+      var ptr;
+      for (ptr = 0; ptr < torrent.wires.length; ptr++) {
+            var otherWire = torrent.wires[ptr];
+            var otherDownSpeed = otherWire.downloadSpeed();
+            var otherUpSpeed = otherWire.uploadSpeed();
+            // Alan: here down_detail_curves.length === up_detail_curves.length
+            // if total wires number increases, then add new curves... 
+            // if pear churns, the curve stays still (because value === 0)
+            if (ptr >= down_detail_curves.length){
+                down_detail_curves.push(new TimeSeries());
+                up_detail_curves.push(new TimeSeries());
+                chart.addTimeSeries(down_detail_curves[ptr], {lineWidth:0.5,strokeStyle:'#00ff00'});
+                chart.addTimeSeries(up_detail_curves[ptr], {lineWidth:0.5,strokeStyle:'#ff0000'});
+            }
+            down_detail_curves[ptr].append(new Date().getTime(), otherDownSpeed);
+            up_detail_curves[ptr].append(new Date().getTime(), otherUpSpeed);
+      }
+      }, 500);
+
+      chart.addTimeSeries(down_curve, {lineWidth:2,strokeStyle:'#00ff00'});
+      chart.addTimeSeries(up_curve, {lineWidth:2,strokeStyle:'#ff0000'});
+      for (ptr = 0; ptr < torrent.wires.length; ptr++) {
+            chart.addTimeSeries(down_detail_curves[ptr], {lineWidth:0.5,strokeStyle:'#00ff00'});
+            chart.addTimeSeries(up_detail_curves[ptr], {lineWidth:0.5,strokeStyle:'#ff0000'});
+      }
+      chart.streamTo(canvas, 500)
+      // End TOTO  (Done by Alan)
+
+// old:
+
+	function onTorrent (torrent) {
+      var torrentFileName = path.basename(torrent.name, path.extname(torrent.name)) + '.torrent'
+	  // Alan TOTO: Draw each contributer's "contribution":
+      var chart = new SmoothieChart({minValue:1000})
+      canvas = document.getElementById('smoothie-chart')
+      var down_curve = new TimeSeries();
+      var up_curve = new TimeSeries();
+      var down_detail_curves = new Array();
+      var up_detail_curves = new Array();
+      var ptr;
+      for (ptr = 0; ptr < torrent.swarm.wires.length; ptr++) {
+          down_detail_curves.push(new TimeSeries());
+          up_detail_curves.push(new TimeSeries());
+      }
+        
+      setInterval(function() {
+      down_curve.append(new Date().getTime(), client.downloadSpeed());
+      up_curve.append(new Date().getTime(), client.uploadSpeed());
+      var ptr;
+      for (ptr = 0; ptr < torrent.swarm.wires.length; ptr++) {
+            var otherWire = torrent.swarm.wires[ptr];
+            var otherDownSpeed = otherWire.downloadSpeed();
+            var otherUpSpeed = otherWire.uploadSpeed();
+            // Alan: here down_detail_curves.length === up_detail_curves.length
+            // if total wires number increases, then add new curves... 
+            // if pear churns, the curve stays still (because value === 0)
+            if (ptr >= down_detail_curves.length){
+                down_detail_curves.push(new TimeSeries());
+                up_detail_curves.push(new TimeSeries());
+                chart.addTimeSeries(down_detail_curves[ptr], {lineWidth:0.5,strokeStyle:'#00ff00'});
+                chart.addTimeSeries(up_detail_curves[ptr], {lineWidth:0.5,strokeStyle:'#ff0000'});
+            }
+            down_detail_curves[ptr].append(new Date().getTime(), otherDownSpeed);
+            up_detail_curves[ptr].append(new Date().getTime(), otherUpSpeed);
+      }
+      }, 500);
+
+      chart.addTimeSeries(down_curve, {lineWidth:2,strokeStyle:'#00ff00'});
+      chart.addTimeSeries(up_curve, {lineWidth:2,strokeStyle:'#ff0000'});
+      for (ptr = 0; ptr < torrent.swarm.wires.length; ptr++) {
+            chart.addTimeSeries(down_detail_curves[ptr], {lineWidth:0.5,strokeStyle:'#00ff00'});
+            chart.addTimeSeries(up_detail_curves[ptr], {lineWidth:0.5,strokeStyle:'#ff0000'});
+      }
+      chart.streamTo(canvas, 500)
+      // End TOTO  (Done by Alan)
+      
+     util.log(
+        '<a class="btn btn-primary btn-xs" href="' + torrent.magnetURI + '" role="button"><i class="fa fa-magnet"></i> Magnet URI</a> ' +
+        '<a class="btn btn-primary btn-xs" href="' + torrent.torrentFileURL + '" target="_blank" download="' + torrentFileName + '" role="button"><i class="fa fa-download"></i> Download .torrent</a> ' +
+        '<a id="downloadButton" class="btn btn-primary btn-xs" role="button"><i class="fa fa-download"></i> Download ' + torrent.name + '</a>'
+      )

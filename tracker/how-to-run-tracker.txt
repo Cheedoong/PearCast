@@ -1,0 +1,7 @@
+cd fastcast-tracker
+npm install
+npm install forever -g
+forever start -l forever.log -o out.log -e err.log server/tracker.js
+
+
+// https://github.com/feross/instant.io/issues/54

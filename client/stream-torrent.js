@@ -7,13 +7,7 @@ var WebTorrent = require('webtorrent')
 
 var util = require('./util')
 
-global.WEBTORRENT_ANNOUNCE = [ 'ws://tracker.fastcast.nz' ]
-
-if (!Peer.WEBRTC_SUPPORT) {
-  util.error('Sorry, your browser is unsupported. Please try again using Chrome.')
-}
-
-http.get('http://fastcast.nz/torrents/' + torrentName, function (res) {
+http.get('https://fastcast.nz/torrents/' + torrentName, function (res) {
   var data = [] // List of Buffer objects
 
   res.on('data', function (chunk) {
@@ -34,17 +28,15 @@ http.get('http://fastcast.nz/torrents/' + torrentName, function (res) {
 
       util.log(
         '<a class="btn btn-primary btn-xs" href="' + torrent.magnetURI + '" role="button"><i class="fa fa-magnet"></i> Magnet URI</a> ' +
-        '<a class="btn btn-primary btn-xs" href="' + torrent.torrentFileURL + '" target="_blank" download="' + torrentFileName + '" role="button"><i class="fa fa-download"></i> Download .torrent</a> ' +
+        '<a class="btn btn-primary btn-xs" href="' + torrent.torrentFileBlobURL + '" target="_blank" download="' + torrentFileName + '" role="button"><i class="fa fa-download"></i> Download .torrent</a> ' +
         '<a id="downloadButton" class="btn btn-primary btn-xs" role="button"><i class="fa fa-download"></i> Download ' + torrent.name + '</a>'
       )
 
       function updateSpeed () {
         var progress = (100 * torrent.progress).toFixed(1)
         util.updateSpeed(
-          '<b>Peers:</b> ' + torrent.swarm.wires.length + ' ' +
-          '<b>Progress:</b> ' + progress + '% ' +
-          '<b>Download speed:</b> ' + prettyBytes(client.downloadSpeed()) + '/s ' +
-          '<b>Upload speed:</b> ' + prettyBytes(client.uploadSpeed()) + '/s'
+          '<b>Peers:</b> ' + torrent.wires.length + ' ' +
+          '<b>Progress:</b> ' + progress + '% '
         )
         progressBar.setAttribute('aria-valuenow', progress)
         progressBar.setAttribute('style', 'width: ' + progress + '%')
@@ -68,10 +60,19 @@ http.get('http://fastcast.nz/torrents/' + torrentName, function (res) {
             download.classList.add('hidden')
 
             // Add a link to the page
+            // var a = document.createElement('a')
+            // a.download = window.URL.createObjectURL(url)
+            // a.click()
+            // window.URL.revokeObjectURL(url)
+
+            var logElem = document.querySelector('.log')
             var a = document.createElement('a')
-            a.download = window.URL.createObjectURL(url)
+            a.target = '_blank'
+            a.download = file.name
+            a.href = url
+            util.log(a)
             a.click()
-            window.URL.revokeObjectURL(url)
+            logElem.removeChild(a)
           })
         })
       })
